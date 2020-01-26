@@ -57,15 +57,10 @@ p {
 
 select,
 input {
-    /* iphone 5
-    padding: 8px 0;
-    font-size: 13px;
-    */
-
-    /* iphone 6 */
+    padding: 0;
     font-size: 16px;
-
-    line-height: 1;
+    line-height: 32px;
+    vertical-align: middle;
     width: 100%;
     box-sizing: border-box;
     background-color: #fff;
@@ -73,7 +68,9 @@ input {
 }
 
 select {
-    padding: 8px;
+    padding: 0 8px;
+    height: 32px;
+    -webkit-appearance: menulist-button;
 }
 
 input[disabled] {
@@ -278,17 +275,17 @@ button:hover {
                             <input type="text" id="basic-arm" value="" data-prefix="basic" />
                         </td>
                         <td>
-                            <input type="text" id="basic-moment" readonly disabled value="" data-prefix="basic" />
+                            <input type="text" id="basic-moment" disabled value="" data-prefix="basic" />
                         </td>
                     </tr>
                     <tr>
                         <td>Fuel weight</td>
                         <td><input type="text" id="fuel-weight" value="" data-prefix="fuel" /></td>
                         <td>
-                            <input type="text" id="fuel-arm" readonly disabled value="" data-prefix="fuel" />
+                            <input type="text" id="fuel-arm" disabled value="" data-prefix="fuel" />
                         </td>
                         <td>
-                            <input type="text" id="fuel-moment" readonly disabled value="" data-prefix="fuel" />
+                            <input type="text" id="fuel-moment" disabled value="" data-prefix="fuel" />
                         </td>
                     </tr>
                     <tr>
@@ -298,7 +295,7 @@ button:hover {
                             <input type="number" id="seat1-arm" min="33" max="41" value="39" data-prefix="seat1" />
                         </td>
                         <td>
-                            <input type="text" id="seat1-moment" readonly disabled value="" data-prefix="seat1" />
+                            <input type="text" id="seat1-moment" disabled value="" data-prefix="seat1" />
                         </td>
                     </tr>
                     <tr>
@@ -308,37 +305,37 @@ button:hover {
                             <input type="number" id="seat2-arm" min="33" max="41" value="39" data-prefix="seat2" />
                         </td>
                         <td>
-                            <input type="text" id="seat2-moment" readonly disabled value="" data-prefix="seat2" />
+                            <input type="text" id="seat2-moment" disabled value="" data-prefix="seat2" />
                         </td>
                     </tr>
                     <tr>
                         <td>Baggage area 1</td>
                         <td><input type="number" id="baggage-area1-weight" value="" data-prefix="baggage-area1" /></td>
                         <td>
-                            <input type="number" id="baggage-area1-arm" readonly disabled value="64" data-prefix="baggage-area1" />
+                            <input type="number" id="baggage-area1-arm" disabled value="64" data-prefix="baggage-area1" />
                         </td>
                         <td>
-                            <input type="text" id="baggage-area1-moment" readonly disabled value="" data-prefix="baggage-area1" />
+                            <input type="text" id="baggage-area1-moment" disabled value="" data-prefix="baggage-area1" />
                         </td>
                     </tr>
                     <tr>
                         <td>Baggage area 2</td>
                         <td><input type="number" id="baggage-area2-weight" value="" data-prefix="baggage-area2" /></td>
                         <td>
-                            <input type="number" id="baggage-area2-arm" readonly disabled value="84" data-prefix="baggage-area2" />
+                            <input type="number" id="baggage-area2-arm" disabled value="84" data-prefix="baggage-area2" />
                         </td>
                         <td>
-                            <input type="text" id="baggage-area2-moment" readonly disabled value="" data-prefix="baggage-area2" />
+                            <input type="text" id="baggage-area2-moment" disabled value="" data-prefix="baggage-area2" />
                         </td>
                     </tr>
                     <tr>
                         <td style="text-align: right">Total weight</td>
-                        <td><input type="text" id="total-weight" readonly disabled value="" style="background-color: yellow" /></td>
+                        <td><input type="text" id="total-weight" disabled value="" style="background-color: yellow" /></td>
                         <td style="text-align: right">
                             <strong>Total moment</strong>
                         </td>
                         <td>
-                            <input type="text" id="total-moment" readonly disabled  value="" style="background-color: yellow" />
+                            <input type="text" id="total-moment" disabled  value="" style="background-color: yellow" />
                         </td>
                     </tr>
                 </tbody>
@@ -504,15 +501,6 @@ button:hover {
         document.getElementById("total-moment-text").innerText = state["cg"].toString().substring(0,5);
     }
 
-    // register onchange event handler on all inputs
-    // as will only fire on non readonly disabled inputs change
-    // using the custom data-prefix attribute the script can identify which weight table
-    // item/row changed and re-calculate it's moment,
-    // then calculate weight/moment totals and finally call drawChart()
-
-    //////////////////////////////////////////////
-    // Data //////////////////////////////////////
-    //////////////////////////////////////////////
     // CG envelope area data
     var data = [
         {cg: 31.0, weight: 1000},
@@ -521,7 +509,6 @@ button:hover {
         {cg: 36.5, weight: 1650},
         {cg: 36.5, weight: 1000}
     ];
-
 
     //////////////////////////////////////////////
     // Chart Config /////////////////////////////
