@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<head>
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent" />
+<title>Cessna 152 mass and balance</title>
+<style type="text/css">
+
+html {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    /* iphone 5
+    padding: 16px 8px;
+     */
+
+    /* iphone 6 */
+    padding: 16px 12px;
+
+    /* ipad portrait and higher
+    padding: 24px;
+     */
+
+    margin: 0;
+    font-family: sans-serif;
+}
+
+.page-container {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.weight-section,
+.cg-limits-section {
+    padding-bottom: 24px;
+}
+
+h1 {
+    font-size: 32px;
+    font-weight: 300;
+    text-align: center;
+    margin: 0 0 24px 0;
+}
+
+h2 {
+    font-size: 24px;
+    margin: 0 0 12px 0;
+}
+
+p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-top: 0;
+}
+
+select,
+input {
+    /* iphone 5
+    padding: 8px 0;
+    font-size: 13px;
+    */
+
+    /* iphone 6 */
+    font-size: 16px;
+
+    line-height: 1;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #fff;
+    text-align: center;
+}
+
+select {
+    padding: 8px;
+}
+
+input[disabled] {
+    border: none;
+    background-color: #f2f2f2;
+    color: #000;
+}
+
+th {
+    /* iphone 5
+    padding: 12px 4px;
+    font-size: 14px;
+    */
+
+    /* iphone 6 */
+    padding: 12px 8px;
+    font-size: 16px;
+
+    background-color: #ccc;
+    text-align: center;
+}
+
+th:first-child,
+td:first-child {
+    text-align: left;
+}
+
+td {
+    /* iphone 5
+    padding: 8px 4px;
+    font-size: 14px;
+    */
+
+    /* iphone 6 */
+    padding: 8px;
+    font-size: 16px;
+
+    background-color: #f2f2f2;
+}
+
+td:first-child {
+    font-weight: bold;
+}
+
+/*
+button {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    color: rgb(69,37,41);
+    background-color: #c0c0c0;
+    border: 1px solid #fbfbfb;
+    padding: 0.5rem 0;
+    border-radius: 4px;
+    margin-top: 0;
+    font-size: 1rem;
+    opacity: 1;
+    margin-top: 1rem;
+}
+
+button:hover {
+    opacity: 0.75;
+}
+*/
+
+.axis-label {
+    font-size: 14px;
+    font-family: Sans-serif;
+    color: #000;
+}
+
+.info-panel {
+    padding: 12px;
+    margin: 12px 0;
+    border-radius: 8px;
+    line-height: 1.5;
+}
+
+.clear-fix:before,
+.clear-fix:after {
+  content: " ";
+  display: table;
+}
+
+.clear-fix:after {
+  clear: both;
+}
+
+
+/* iphone 5 */
+@media (max-width: 320px) {
+
+    body {
+        padding: 16px 8px;
+        /* background-color: pink; */
+    }
+
+    th {
+        padding: 12px 4px;
+        font-size: 14px;
+    }
+
+    td {
+        padding: 8px 4px;
+        font-size: 14px;
+    }
+
+    input {
+        padding: 8px 0;
+        font-size: 13px;
+    }
+}
+
+/* iphone portrait */
+@media (max-width: 660px) {
+    h2 {
+        text-align: center;
+    }
+}
+
+@media (min-width: 660px) {
+
+    body {
+        padding: 16px;
+    }
+
+}
+
+/* ipad landscape */
+@media (min-width: 1020px) {
+
+    body {
+        padding: 16px 0;
+    }
+
+    h1 {
+        margin-bottom: 32px;
+    }
+
+    .page-container {
+        max-width: 100%;
+        margin: 0;
+    }
+
+    .weight-section,
+    .cg-limits-section {
+        box-sizing: border-box;
+        padding: 0 16px 24px 16px;
+        float: left;
+        width: 50%;
+    }
+}
+
+
+/* ipad landscape */
+@media (min-width: 1150px) {
+    body {
+        padding: 16px;
+    }
+}
+</style>
+</head>
+<body>
+<div class="page-container">
+
+    <h1>Cessna 152 mass and balance</h1>
+
+    <div class="clear-fix">
+
+        <section class="weight-section">
+
+            <h2>Aircraft weight</h2>
+
+            <div style="padding-bottom: 4px; font-size: 14px; line-height: 1.5; padding-bottom: 8px">
+                Select an aircraft to automatically populate it's basic weight details.
+            </div>
+
+            <select name="aircraft-select" style="margin-bottom: 16px">
+                <option value="default">Select aircraft (optional)</option>
+                <option value="G-BSDO">G-BSDO</option>
+                <option value="G-BNJH">G-BNJH</option>
+            </select>
+
+            <p><strong>Enter weight values in pounds (Ibs)</strong> or <a href="#">use weight converter</a></p>
+
+            <table style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Weight (Ibs)</th>
+                        <th>Arm </th>
+                        <th>Moment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Aircraft basic weight</td>
+                        <td>
+                            <input type="text" id="basic-weight" value="" data-prefix="basic" />
+                        </td>
+                        <td>
+                            <input type="text" id="basic-arm" value="" data-prefix="basic" />
+                        </td>
+                        <td>
+                            <input type="text" id="basic-moment" readonly disabled value="" data-prefix="basic" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Fuel weight</td>
+                        <td><input type="text" id="fuel-weight" value="" data-prefix="fuel" /></td>
+                        <td>
+                            <input type="text" id="fuel-arm" readonly disabled value="" data-prefix="fuel" />
+                        </td>
+                        <td>
+                            <input type="text" id="fuel-moment" readonly disabled value="" data-prefix="fuel" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Pilot</td>
+                        <td><input type="number" id="seat1-weight" value="" data-prefix="seat1" /></td>
+                        <td>
+                            <input type="number" id="seat1-arm" min="33" max="41" value="39" data-prefix="seat1" />
+                        </td>
+                        <td>
+                            <input type="text" id="seat1-moment" readonly disabled value="" data-prefix="seat1" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Pilot 2 / Passenger</td>
+                        <td><input type="number" id="seat2-weight" value=""  data-prefix="seat2" /></td>
+                        <td>
+                            <input type="number" id="seat2-arm" min="33" max="41" value="39" data-prefix="seat2" />
+                        </td>
+                        <td>
+                            <input type="text" id="seat2-moment" readonly disabled value="" data-prefix="seat2" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Baggage area 1</td>
+                        <td><input type="number" id="baggage-area1-weight" value="" data-prefix="baggage-area1" /></td>
+                        <td>
+                            <input type="number" id="baggage-area1-arm" readonly disabled value="64" data-prefix="baggage-area1" />
+                        </td>
+                        <td>
+                            <input type="text" id="baggage-area1-moment" readonly disabled value="" data-prefix="baggage-area1" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Baggage area 2</td>
+                        <td><input type="number" id="baggage-area2-weight" value="" data-prefix="baggage-area2" /></td>
+                        <td>
+                            <input type="number" id="baggage-area2-arm" readonly disabled value="84" data-prefix="baggage-area2" />
+                        </td>
+                        <td>
+                            <input type="text" id="baggage-area2-moment" readonly disabled value="" data-prefix="baggage-area2" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right">Total weight</td>
+                        <td><input type="text" id="total-weight" readonly disabled value="" style="background-color: yellow" /></td>
+                        <td style="text-align: right">
+                            <strong>Total moment</strong>
+                        </td>
+                        <td>
+                            <input type="text" id="total-moment" readonly disabled  value="" style="background-color: yellow" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-panel" style="background-color: yellow;">
+                Total aircraft weight is <strong id="total-weight-text"></strong> pounds.<br/>
+                C.G. is located <strong id="total-moment-text"></strong> inches aft of datum.
+            </div>
+
+        </section>
+
+        <section class="cg-limits-section">
+
+            <h2>Centre of gravity limits</h2>
+
+            <p style="font-size: 14px">The aircraft's calculated total weight and centre of gravity are plotted as a blue dot on the chart below.</p>
+
+            <div class="chart-container">
+
+            </div>
+
+            <div class="axis-label" style="text-align: center; padding-bottom: 12px">
+                Airplane C.G. location (inches aft of datum)
+            </div>
+
+            <div class="info-panel" style="background-color: #47cf73;">If the blue dot is inside the green area of the chart the aircraft's centre of gravity is within limits.
+            </div>
+
+            <div class="info-panel" style="background-color: red;"><strong>If the blue dot is outside the green area of the chart the centre of gravity is outside of limits and the aircraft should not be flow</strong>.
+            </div>
+
+            <div class="info-panel" style="background-color: #f2f2f2; margin-bottom: 12px">
+                Notes:<br/><br/>
+                <p>Airplane C.G. location is calculated by dividing total moment by total weight.</p>
+                <p>Aircaft basic weight details can be found in the aircraft's tech log ( <a href="">example</a> )</p>
+                <p>Arms values can be found in the aircraft's POH weight and balance section ( <a href="#">example ).</p>
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+(function() {
+
+    var aircraft = {
+        "default": {
+            basicEmptyWeight: 0,
+            moment: 0,
+            leverArm: 0,
+            fuelLeverArm: 0
+        },
+        "G-BSDO": {
+            basicEmptyWeight: 1213,
+            moment: 37096,
+            leverArm: 30.58,
+            fuelLeverArm: 42.0
+        },
+        "G-BNJH": {
+            basicEmptyWeight: 1213,
+            moment: 37096,
+            leverArm: 30.58,
+            fuelLeverArm: 42.
+        }
+    }
+
+    var state = {
+        "basic-weight": aircraft.default.basicEmptyWeight,
+        "basic-arm": aircraft.default.leverArm,
+        "basic-moment": aircraft.default.moment,
+
+        "fuel-weight": 0,
+        "fuel-arm": aircraft.default.fuelLeverArm,
+        "fuel-moment": 0,
+
+        "seat1-weight": 0,
+        "seat1-arm": 39,
+        "seat1-moment": 0,
+
+        "seat2-weight": 0,
+        "seat2-arm": 39,
+        "seat2-moment": 0,
+
+        "baggage-area1-weight": 0,
+        "baggage-area1-arm": 64,
+        "baggage-area1-moment": 0,
+
+        "baggage-area2-weight": 0,
+        "baggage-area2-arm": 84,
+        "baggage-area2-moment": 0,
+
+        "total-weight": 0,
+        "total-moment": 0,
+        "cg": 0
+    };
+
+    function onChangeInput(e) {
+        var input = e.target;
+        if (input.name === "aircraft-select") {
+            console.log(input.value);
+            var selectedAircraft = aircraft[input.value];
+            console.log("selectedAircraft =- ", selectedAircraft);
+            state["basic-weight"] = selectedAircraft.basicEmptyWeight;
+            state["basic-arm"] = selectedAircraft.leverArm;
+            state["basic-moment"] = selectedAircraft.moment;
+            state["fuel-arm"] = selectedAircraft.fuelLeverArm;
+            document.getElementById("basic-weight").value = state["basic-weight"];
+            document.getElementById("basic-arm").value = state["basic-arm"];
+            document.getElementById("basic-moment").value = state["basic-moment"];
+            document.getElementById("fuel-arm").value = state["fuel-arm"];
+        } else {
+            var prefix = input.getAttribute("data-prefix");
+            console.log(input);
+            console.log(input.getAttribute("data-prefix"));
+            console.log(e);
+            // 1. todo input validation
+
+            // 2. update state
+            state[input.id] = input.value;
+
+            // 3 re calculate moment for the row that changed
+            calculateItemMoment(prefix)
+        }
+
+        // 4. re calculate total weight and total Moment
+        calculateTotalWeightAndMoment();
+
+        // 5. re-plot moment/weight on chart
+        drawChart();
+    }
+
+    function calculateItemMoment(prefix) {
+        var weight = Number(state[prefix + "-weight"] || 0);
+        var arm = Number(state[prefix + "-arm"] || 0);
+        state[prefix + "-moment"] = Math.ceil(weight * arm);
+        document.getElementById(prefix + "-moment").value = state[prefix + "-moment"];
+    }
+
+    function calculateTotalWeightAndMoment() {
+        var weightInputIds = ["basic-weight", "fuel-weight", "seat1-weight", "seat2-weight", "baggage-area1-weight", "baggage-area2-weight"]
+        var momentInputIds = ["basic-moment", "fuel-moment", "seat1-moment", "seat2-moment", "baggage-area1-moment", "baggage-area2-moment"]
+        var totalWeight = 0;
+        var totalMoment = 0;
+        for (var i = 0; i < weightInputIds.length; i++) {
+            totalWeight = totalWeight + Number(state[weightInputIds[i]] || 0);
+        }
+        for (var i = 0; i < momentInputIds.length; i++) {
+            totalMoment = totalMoment + Number(state[momentInputIds[i]] || 0);
+        }
+        state["total-moment"] = totalMoment;
+        state["total-weight"] = Math.ceil(totalWeight);
+        state["cg"] = totalMoment === 0 && totalWeight === 0 ? 0 : totalMoment / Math.ceil(totalWeight);
+
+        console.log("ST = ", state)
+
+        document.getElementById("total-weight").value = state["total-weight"];
+        document.getElementById("total-moment").value = state["total-moment"];
+        document.getElementById("total-weight-text").innerText = state["total-weight"];
+        document.getElementById("total-moment-text").innerText = state["cg"].toString().substring(0,5);
+    }
+
+    // register onchange event handler on all inputs
+    // as will only fire on non readonly disabled inputs change
+    // using the custom data-prefix attribute the script can identify which weight table
+    // item/row changed and re-calculate it's moment,
+    // then calculate weight/moment totals and finally call drawChart()
+
+    //////////////////////////////////////////////
+    // Data //////////////////////////////////////
+    //////////////////////////////////////////////
+    // CG envelope area data
+    var data = [
+        {cg: 31.0, weight: 1000},
+        {cg: 31.0, weight: 1350},
+        {cg: 32.5, weight: 1650},
+        {cg: 36.5, weight: 1650},
+        {cg: 36.5, weight: 1000}
+    ];
+
+
+    //////////////////////////////////////////////
+    // Chart Config /////////////////////////////
+    //////////////////////////////////////////////
+
+    var chartHeight = 500;
+
+    // Set the dimensions of the canvas / graph
+    var margin = { top: 20, right: 20, bottom: 20, left: 60 },
+        width, // width gets defined below
+        height = chartHeight - margin.top - margin.bottom,
+        maxSingleColumnWidth = 760,
+        splitLayoutWidth = 900;
+
+    // Set the scales ranges
+    var xScale = d3.scaleLinear().range([width, 0]);
+    var yScale = d3.scaleLinear().range([height, 0]);
+
+    // Define the axes
+    var xAxis = d3.axisBottom().scale(xScale).tickValues([30, 31, 32, 33, 34, 35, 36, 37]);
+    var yAxis = d3.axisLeft().scale(yScale);
+
+    // create a line denoting c of g area
+    var line = d3.line();
+
+    // append svg element to dom
+    var svg = d3.select(".chart-container")
+                .append("svg")
+                .attr("height", height + margin.top + margin.bottom);
+
+    var artboard = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // set the domain range from the data
+    xScale.domain([
+        d3.min(data, function(d) { return 30.0; }),
+        d3.max(data, function(d) { return 37.0; })
+    ]);
+
+    yScale.domain([
+        d3.min(data, function(d) { return 1000; }),
+        d3.max(data, function(d) { return 1800; })
+    ]);
+
+    // draw the line created above
+    var path = artboard.append("path")
+                        .data([data])
+                        .style('fill', '#47cf73')
+                        .style('stroke', 'steelblue')
+                        .style('stroke-width', '1px');
+
+    // Add the X Axis
+    var xAxisEl = artboard.append("g").attr("transform", "translate(0," + height + ")");
+
+    // Add the Y Axis
+    // we aren't resizing height in this demo so the yAxis stays static, we don't need to call this every resize
+    var yAxisEl = artboard.append("g").call(yAxis);
+
+    function addChartAxisLabels() {
+        // x axis label
+        // svg.append("text")
+        // .attr("x", 200)
+        // .attr("x", width / 2)
+        // .attr("y", chartHeight - 10)
+        // .attr("class", "axis-label")
+        // .text("Airplane C.G. location (inches aft of datum)");
+
+        // y axis label
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 16)
+            .attr("x", 0 - (chartHeight / 2))
+            .attr("class", "axis-label")
+            .style("text-anchor", "middle")
+            .text("Weight (pounds)");
+    }
+
+    function drawChart() {
+        // reset the width
+        width = parseInt(d3.select('.page-container').style('width'), 10) - margin.left - margin.right;
+console.log("width before = ", width)
+        if(width > splitLayoutWidth) {
+            width = (Math.floor(width / 2) - 64);
+            // height = 360;
+        }
+        else if (width > maxSingleColumnWidth) {
+            width = maxSingleColumnWidth - 64;
+        }
+
+console.log("width after = ", width)
+
+        // set the svg dimensions
+        svg.attr("width", width + margin.left + margin.right);
+
+        // Set new range for xScale
+        xScale.range([0, width]);
+
+        // give the x axis the resized scale
+        xAxis.scale(xScale);
+
+        // draw the new xAxis
+        xAxisEl.call(xAxis);
+
+        // assign x and y axis scale values
+        line.x(function(d) { return xScale(d.cg); })
+            .y(function(d) { return yScale(d.weight); });
+        path.attr('d', line);
+
+        // select
+        svg.select("circle")
+            .attr("cx", xScale(state.cg) + margin.left)
+            .attr("cy", yScale(state["total-weight"]) + margin.top)
+    }
+
+    function setDefaultState() {
+        state["basic-weight"] = aircraft.default.basicEmptyWeight,
+        state["basic-arm"] = aircraft.default.leverArm,
+        state["basic-moment"] = aircraft.default.moment,
+        state["fuel-arm"] = aircraft.default.fuelLeverArm,
+        document.getElementById("basic-weight").value = state["basic-weight"];
+        document.getElementById("basic-arm").value = state["basic-arm"];
+        document.getElementById("basic-moment").value = state["basic-moment"];
+        document.getElementById("fuel-arm").value = state["fuel-arm"];
+    }
+
+    function init() {
+        setDefaultState();
+        calculateTotalWeightAndMoment();
+        drawChart();
+        addChartAxisLabels();
+
+        // add cg marker point to chart
+        svg.append("circle")
+            .attr("cx", xScale(state.cg) + margin.left)
+            .attr("cy", yScale(state["total-weight"]) + margin.top)
+            .attr("r", 4).style("fill", "blue");
+    }
+
+    window.addEventListener('resize', drawChart);
+    window.addEventListener('change', onChangeInput);
+
+    init();
+
+    /* notes
+
+    x-axis label possibly better under chart on main page so easy to make responsive
+
+    .axis-label {
+    font-size: 14px;
+    font-family: Sans-serif;
+    color: #333;
+    }
+
+    var l_converter = d3.scale.linear();
+    l_converter.domain([0, 10]);
+    l_converter.range([0, 1000]);
+    The above code can be read as
+
+    Given any number between 0 and 10, convert it to a number between 0 and 1000 using a linear scale.
+
+
+    http://bl.ocks.org/anonymous/64f9c70bd629810bee67392f6224d414
+
+    https://medium.com/@ghenshaw.work/customizing-axes-in-d3-js-99d58863738b
+    */
+
+})();
+</script>
+
+</body>
+
+</html>
