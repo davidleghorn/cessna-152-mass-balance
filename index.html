@@ -115,6 +115,23 @@ td:first-child {
     font-weight: bold;
 }
 
+.weight-conversions {
+    font-size: 13px;
+    line-height: 1;
+    color: #333;
+    padding: 0 0 8px 0;
+}
+
+.weight-conversions ul {
+    padding: 4px 0;
+    margin: 0;
+}
+
+.weight-conversions ul li {
+    display: inline-block;
+    padding: 4px 24px 4px 0;
+}
+
 /*
 button {
     display: inline-block;
@@ -244,17 +261,26 @@ button:hover {
 
             <h2>Aircraft weight</h2>
 
-            <div style="padding-bottom: 4px; font-size: 14px; line-height: 1.5; padding-bottom: 8px">
-                Select an aircraft to automatically populate it's basic weight details.
+            <div style="padding-bottom: 4px; font-size: 14px; line-height: 1.5">
+                Select an aircraft to automatically populate it's basic weight values.
             </div>
 
-            <select name="aircraft-select" style="margin-bottom: 16px">
+            <select name="aircraft-select" style="margin-bottom: 24px">
                 <option value="default">Select aircraft (optional)</option>
                 <option value="G-BSDO">G-BSDO</option>
                 <option value="G-BNJH">G-BNJH</option>
             </select>
 
-            <p><strong>Enter weight values in pounds (Ibs)</strong> or <a href="#">use weight converter</a></p>
+            <div><strong>Enter weight values in pounds (Ibs)</strong>
+                <!-- or <a href="#">use weight converter</a> -->
+            </div>
+            <div class="info-panel weight-conversions" style="background-color: #f2f2f2; padding: 8px 12px;">
+                <ul>
+                    <li>1 US Gallon = 6 pounds</li>
+                    <li>1Kg = 2.2 pounds</li>
+                    <li>1 Stone = 14 pounds</li>
+                </ul>
+            </div>
 
             <table style="width: 100%">
                 <thead>
@@ -365,14 +391,17 @@ button:hover {
             <div class="info-panel" style="background-color: #47cf73;">If the blue dot is inside the green area of the chart the aircraft's centre of gravity is within limits.
             </div>
 
-            <div class="info-panel" style="background-color: red;"><strong>If the blue dot is outside the green area of the chart the centre of gravity is outside of limits and the aircraft should not be flow</strong>.
+            <div class="info-panel" style="background-color: red;"><strong>If the blue dot is outside the green area of the chart the centre of gravity is outside limits and the aircraft should not be flown.</strong>.
             </div>
 
             <div class="info-panel" style="background-color: #f2f2f2; margin-bottom: 12px">
-                Notes:<br/><br/>
-                <p>Airplane C.G. location is calculated by dividing total moment by total weight.</p>
-                <p>Aircaft basic weight details can be found in the aircraft's tech log ( <a href="">example</a> )</p>
-                <p>Arms values can be found in the aircraft's POH weight and balance section ( <a href="#">example ).</p>
+                Notes:<br/>
+                <ul>
+                    <li>Airplane C.G. location is calculated by dividing total moment by total weight.</li>
+                    <li>Aircaft weight and lever arm values can be found in the aircraft's tech log.
+                         <!-- ( <a href="">example</a> ) -->
+                    </li>
+                </ul>
             </div>
 
         </section>
@@ -438,36 +467,40 @@ button:hover {
 
     function onChangeInput(e) {
         var input = e.target;
-        if (input.name === "aircraft-select") {
-            console.log(input.value);
+        if (input.name === "aircraft-select") {  // <select> value changed
             var selectedAircraft = aircraft[input.value];
-            console.log("selectedAircraft =- ", selectedAircraft);
-            state["basic-weight"] = selectedAircraft.basicEmptyWeight;
-            state["basic-arm"] = selectedAircraft.leverArm;
-            state["basic-moment"] = selectedAircraft.moment;
-            state["fuel-arm"] = selectedAircraft.fuelLeverArm;
-            document.getElementById("basic-weight").value = state["basic-weight"];
-            document.getElementById("basic-arm").value = state["basic-arm"];
-            document.getElementById("basic-moment").value = state["basic-moment"];
-            document.getElementById("fuel-arm").value = state["fuel-arm"];
-        } else {
+
+            state["basic-weight"] = selectedAircraft.basicEmptyWeight || 0;
+            state["basic-arm"] = selectedAircraft.leverArm || 0;
+            state["basic-moment"] = selectedAircraft.moment || 0;
+            state["fuel-arm"] = selectedAircraft.fuelLeverArm || 0;
+
+            var basicWeightInput = document.getElementById("basic-weight");
+            var basicMomentInput = document.getElementById("basic-moment");
+            var basicArmInput = document.getElementById("basic-arm");
+            var fuelArmInput = document.getElementById("fuel-arm");
+
+            basicWeightInput.value = state["basic-weight"];
+            basicArmInput.value = state["basic-arm"];
+            basicMomentInput.value = state["basic-moment"];
+            fuelArmInput.value = state["fuel-arm"];
+
+            var basicWeightInputsAreDisabled = input.value !== "default";
+            basicWeightInput.disabled = basicWeightInputsAreDisabled;
+            basicArmInput.disabled = basicWeightInputsAreDisabled;
+            basicMomentInput.disabled = basicWeightInputsAreDisabled;
+            fuelArmInput.disabled = basicWeightInputsAreDisabled;
+        } else {  // <input> value changed
             var prefix = input.getAttribute("data-prefix");
-            console.log(input);
-            console.log(input.getAttribute("data-prefix"));
-            console.log(e);
+            // console.log(input);
+            // console.log(input.getAttribute("data-prefix"));
+            // console.log(e);
             // 1. todo input validation
-
-            // 2. update state
             state[input.id] = input.value;
-
-            // 3 re calculate moment for the row that changed
             calculateItemMoment(prefix)
         }
 
-        // 4. re calculate total weight and total Moment
         calculateTotalWeightAndMoment();
-
-        // 5. re-plot moment/weight on chart
         drawChart();
     }
 
@@ -493,7 +526,7 @@ button:hover {
         state["total-weight"] = Math.ceil(totalWeight);
         state["cg"] = totalMoment === 0 && totalWeight === 0 ? 0 : totalMoment / Math.ceil(totalWeight);
 
-        console.log("ST = ", state)
+        // console.log("ST = ", state)
 
         document.getElementById("total-weight").value = state["total-weight"];
         document.getElementById("total-moment").value = state["total-moment"];
@@ -588,7 +621,7 @@ button:hover {
     function drawChart() {
         // reset the width
         width = parseInt(d3.select('.page-container').style('width'), 10) - margin.left - margin.right;
-console.log("width before = ", width)
+// console.log("width before = ", width)
         if(width > splitLayoutWidth) {
             width = (Math.floor(width / 2) - 64);
             // height = 360;
@@ -597,7 +630,7 @@ console.log("width before = ", width)
             width = maxSingleColumnWidth - 64;
         }
 
-console.log("width after = ", width)
+// console.log("width after = ", width)
 
         // set the svg dimensions
         svg.attr("width", width + margin.left + margin.right);
@@ -650,29 +683,6 @@ console.log("width after = ", width)
     window.addEventListener('change', onChangeInput);
 
     init();
-
-    /* notes
-
-    x-axis label possibly better under chart on main page so easy to make responsive
-
-    .axis-label {
-    font-size: 14px;
-    font-family: Sans-serif;
-    color: #333;
-    }
-
-    var l_converter = d3.scale.linear();
-    l_converter.domain([0, 10]);
-    l_converter.range([0, 1000]);
-    The above code can be read as
-
-    Given any number between 0 and 10, convert it to a number between 0 and 1000 using a linear scale.
-
-
-    http://bl.ocks.org/anonymous/64f9c70bd629810bee67392f6224d414
-
-    https://medium.com/@ghenshaw.work/customizing-axes-in-d3-js-99d58863738b
-    */
 
 })();
 </script>
