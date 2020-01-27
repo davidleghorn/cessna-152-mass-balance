@@ -77,6 +77,13 @@ input[disabled] {
     border: none;
     background-color: #f2f2f2;
     color: #000;
+    opacity: 1.0;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 th {
@@ -88,7 +95,6 @@ th {
     /* iphone 6 */
     padding: 12px 8px;
     font-size: 16px;
-
     background-color: #ccc;
     text-align: center;
 }
@@ -107,7 +113,6 @@ td {
     /* iphone 6 */
     padding: 8px;
     font-size: 16px;
-
     background-color: #f2f2f2;
 }
 
@@ -129,7 +134,7 @@ td:first-child {
 
 .weight-conversions ul li {
     display: inline-block;
-    padding: 4px 24px 4px 0;
+    padding: 4px 16px 4px 0;
 }
 
 /*
@@ -166,16 +171,26 @@ button:hover {
     line-height: 1.5;
 }
 
+.info-ul {
+    padding: 12px 16px 0 16px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5
+}
+
+.info-ul li {
+    padding-bottom: 12px;
+}
+
 .clear-fix:before,
 .clear-fix:after {
-  content: " ";
-  display: table;
+    content: " ";
+    display: table;
 }
 
 .clear-fix:after {
-  clear: both;
+    clear: both;
 }
-
 
 /* iphone 5 */
 @media (max-width: 320px) {
@@ -268,7 +283,7 @@ button:hover {
             <select name="aircraft-select" style="margin-bottom: 24px">
                 <option value="default">Select aircraft (optional)</option>
                 <option value="G-BSDO">G-BSDO</option>
-                <option value="G-BNJH">G-BNJH</option>
+                <!-- <option value="G-BNJH">G-BNJH</option> -->
             </select>
 
             <div><strong>Enter weight values in pounds (Ibs)</strong>
@@ -278,7 +293,7 @@ button:hover {
                 <ul>
                     <li>1 US Gallon = 6 pounds</li>
                     <li>1Kg = 2.2 pounds</li>
-                    <li>1 Stone = 14 pounds</li>
+                    <!-- <li>1 Stone = 14 pounds</li> -->
                 </ul>
             </div>
 
@@ -295,10 +310,10 @@ button:hover {
                     <tr>
                         <td>Aircraft basic weight</td>
                         <td>
-                            <input type="text" id="basic-weight" value="" data-prefix="basic" />
+                            <input type="number" id="basic-weight" value="" data-prefix="basic" />
                         </td>
                         <td>
-                            <input type="text" id="basic-arm" value="" data-prefix="basic" />
+                            <input type="number" id="basic-arm" value="" data-prefix="basic" />
                         </td>
                         <td>
                             <input type="text" id="basic-moment" disabled value="" data-prefix="basic" />
@@ -306,9 +321,9 @@ button:hover {
                     </tr>
                     <tr>
                         <td>Fuel weight</td>
-                        <td><input type="text" id="fuel-weight" value="" data-prefix="fuel" /></td>
+                        <td><input type="number" id="fuel-weight" value="" data-prefix="fuel" /></td>
                         <td>
-                            <input type="text" id="fuel-arm" disabled value="" data-prefix="fuel" />
+                            <input type="number" id="fuel-arm" value="" data-prefix="fuel" />
                         </td>
                         <td>
                             <input type="text" id="fuel-moment" disabled value="" data-prefix="fuel" />
@@ -338,7 +353,7 @@ button:hover {
                         <td>Baggage area 1</td>
                         <td><input type="number" id="baggage-area1-weight" value="" data-prefix="baggage-area1" /></td>
                         <td>
-                            <input type="number" id="baggage-area1-arm" disabled value="64" data-prefix="baggage-area1" />
+                            <input type="number" id="baggage-area1-arm" value="64" data-prefix="baggage-area1" />
                         </td>
                         <td>
                             <input type="text" id="baggage-area1-moment" disabled value="" data-prefix="baggage-area1" />
@@ -348,7 +363,7 @@ button:hover {
                         <td>Baggage area 2</td>
                         <td><input type="number" id="baggage-area2-weight" value="" data-prefix="baggage-area2" /></td>
                         <td>
-                            <input type="number" id="baggage-area2-arm" disabled value="84" data-prefix="baggage-area2" />
+                            <input type="number" id="baggage-area2-arm" value="84" data-prefix="baggage-area2" />
                         </td>
                         <td>
                             <input type="text" id="baggage-area2-moment" disabled value="" data-prefix="baggage-area2" />
@@ -391,14 +406,13 @@ button:hover {
             <div class="info-panel" style="background-color: #47cf73;">If the blue dot is inside the green area of the chart the aircraft's centre of gravity is within limits.
             </div>
 
-            <div class="info-panel" style="background-color: red;"><strong>If the blue dot is outside the green area of the chart the centre of gravity is outside limits and the aircraft should not be flown.</strong>.
+            <div class="info-panel" style="background-color: red;">If the blue dot is <strong>outside the green area</strong> of the chart the centre of gravity is <strong>outside limits</strong> and the <strong>aircraft should not be flown.</strong>
             </div>
 
-            <div class="info-panel" style="background-color: #f2f2f2; margin-bottom: 12px">
-                Notes:<br/>
-                <ul>
+            <div class="info-panel" style="background-color: #f2f2f2;">
+                <ul class="info-ul">
                     <li>Airplane C.G. location is calculated by dividing total moment by total weight.</li>
-                    <li>Aircaft weight and lever arm values can be found in the aircraft's tech log.
+                    <li>Aircaft weight and lever arm values are from the aircraft weight & centre of gravity schedule found in the aircraft's tech log.
                          <!-- ( <a href="">example</a> ) -->
                     </li>
                 </ul>
@@ -419,19 +433,28 @@ button:hover {
             basicEmptyWeight: 0,
             moment: 0,
             leverArm: 0,
-            fuelLeverArm: 0
+            fuelLeverArm: 0,
+            seatArm: 39,
+            baggageArea1Arm: 64,
+            baggageArea2Arm: 84
         },
         "G-BSDO": {
             basicEmptyWeight: 1213,
             moment: 37096,
             leverArm: 30.58,
-            fuelLeverArm: 42.0
+            fuelLeverArm: 42.0,
+            seatArm: 39,
+            baggageArea1Arm: 64,
+            baggageArea2Arm: 84
         },
         "G-BNJH": {
             basicEmptyWeight: 1213,
             moment: 37096,
             leverArm: 30.58,
-            fuelLeverArm: 42.
+            fuelLeverArm: 42,
+            seatArm: 39,
+            baggageArea1Arm: 64,
+            baggageArea2Arm: 84
         }
     }
 
@@ -445,19 +468,19 @@ button:hover {
         "fuel-moment": 0,
 
         "seat1-weight": 0,
-        "seat1-arm": 39,
+        "seat1-arm": aircraft.default.seatArm,
         "seat1-moment": 0,
 
         "seat2-weight": 0,
-        "seat2-arm": 39,
+        "seat2-arm": aircraft.default.seatArm,
         "seat2-moment": 0,
 
         "baggage-area1-weight": 0,
-        "baggage-area1-arm": 64,
+        "baggage-area1-arm": aircraft.default.baggageArea1Arm,
         "baggage-area1-moment": 0,
 
         "baggage-area2-weight": 0,
-        "baggage-area2-arm": 84,
+        "baggage-area2-arm": aircraft.default.baggageArea2Arm,
         "baggage-area2-moment": 0,
 
         "total-weight": 0,
@@ -474,6 +497,10 @@ button:hover {
             state["basic-arm"] = selectedAircraft.leverArm || 0;
             state["basic-moment"] = selectedAircraft.moment || 0;
             state["fuel-arm"] = selectedAircraft.fuelLeverArm || 0;
+            state["seat1-arm"] = selectedAircraft.seatArm || 0;
+            state["seat2-arm"] = selectedAircraft.seatArm || 0;
+            state["baggage-area1-arm"] = selectedAircraft.baggageArea1Arm || 0;
+            state["baggage-area2-arm"] = selectedAircraft.baggageArea2Arm || 0;
 
             var basicWeightInput = document.getElementById("basic-weight");
             var basicMomentInput = document.getElementById("basic-moment");
@@ -488,14 +515,10 @@ button:hover {
             var basicWeightInputsAreDisabled = input.value !== "default";
             basicWeightInput.disabled = basicWeightInputsAreDisabled;
             basicArmInput.disabled = basicWeightInputsAreDisabled;
-            basicMomentInput.disabled = basicWeightInputsAreDisabled;
             fuelArmInput.disabled = basicWeightInputsAreDisabled;
         } else {  // <input> value changed
             var prefix = input.getAttribute("data-prefix");
-            // console.log(input);
-            // console.log(input.getAttribute("data-prefix"));
-            // console.log(e);
-            // 1. todo input validation
+            // TODO input validation
             state[input.id] = input.value;
             calculateItemMoment(prefix)
         }
@@ -664,6 +687,10 @@ button:hover {
         document.getElementById("basic-arm").value = state["basic-arm"];
         document.getElementById("basic-moment").value = state["basic-moment"];
         document.getElementById("fuel-arm").value = state["fuel-arm"];
+        document.getElementById("seat1-arm").value = state["seat1-arm"];
+        document.getElementById("seat2-arm").value = state["seat2-arm"];
+        document.getElementById("baggage-area1-arm").value = state["baggage-area1-arm"];
+        document.getElementById("baggage-area2-arm").value = state["baggage-area2-arm"];
     }
 
     function init() {
